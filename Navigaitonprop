@@ -1,0 +1,136 @@
+reset wipe the navigator state and replace it with a new  - to reset navigator state
+setParams -> make changes to route's params  // make changes to route's params
+dispatch -> send an action object to update the navigation state
+setOptions -> update the screens options  => to  update options
+isFocused -> check whether the screen is focused 
+addlistener ->subscribe to updates to events from the navigators
+
+
+
+
+
+stack.navigator is a component that takes route configuration<cấu hinh tuyến đường> 
+as its children with additional props for configuration and renders our content. hiện thị nội dung
+
+ The Navigator should contain Screen elements as its children to define the configuration for routes.
+
+
+
+glossary of terms 
+
+Navigator => is reat component that decides how to render the screens you have defiened 
+it contains Screen elements as it;s children to define the configutation for screens
+router -> is a collection of functions that decide how to handle actions and state changes in the navigator 
+similar to reducers in redux apps ,
+Screen component ->
+ A screen component is a component that we use in our route configuration  
+
+Navigation Prop -> this prop will be passed to all screens , and it can be used for the following: 
+là 1 thuốc tính để chuyền sử dụng các thuộc tính của navigation
+dispatch : will send and action up to the route
+Route Prop  
+navigate , boBack are available to dispatch actions in a conenient way
+
+Navigation State
+
+navigationContainer 
+ is a compnent  which manages our navigation tree and comtains the navigation state
+ {
+
+
+
+
+
+    import * as React from 'react';
+import { Button, View, Text, TouchableOpacity, Alert } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+const profile = ({ navigation, route }) => {
+  const val = '';
+  return (
+    <View>
+      <Text>{route.params.name}</Text>
+      <Button
+        onPress={() => (navigation.setParams({
+          title: val === '' ? "hello" : title
+        })
+
+        )}
+
+        title="press" />
+      <Button
+        title='excuting setOptions'
+        onPress={() =>
+          navigation.setOptions(
+            {
+              title: 'hello men'
+              ,
+              headerRight: () => (
+                <TouchableOpacity
+                  title='Alert'
+                  onPress={() => { Alert.alert(JSON.stringify("hello")) }}
+                >
+                  <Text>he</Text>
+                </TouchableOpacity>
+
+              )
+            }
+          )
+        }
+      />
+    </View>
+  )
+}
+function HomeScreen({ navigation: { navigate } }) {
+  return (
+    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+      <Text>This is the home screen of the app</Text>
+      <Button
+        onPress={() =>
+          navigate('Profile', { names: ['Brent', 'Satya', 'Michaś'] })
+        }
+        title="Go to Brent's profile"
+      />
+      <Button
+        title='navigate'
+        onPress={() => {
+          navigate("profile", {
+            name: "hello",
+            title: "header"
+          })
+
+        }}
+      />
+
+    </View>
+  );
+}
+
+
+
+const Stack = createNativeStackNavigator();
+
+function App() {
+  return (
+    <NavigationContainer>
+      <Stack.Navigator initialRouteName="Home">
+        <Stack.Screen name="Home" component={HomeScreen}
+          options={{
+            headerRight: () => (
+
+              <Button
+                title='press'
+              />
+            )
+          }}
+        />
+        <Stack.Screen name="profile" component={profile}
+          options={({ route }) => ({ title: route.params.title })}
+        />
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
+}
+
+export default App;
+ }
